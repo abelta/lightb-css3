@@ -1,0 +1,2 @@
+ul[data-lightbox], ol[data-lightbox] { list-style: none; }
+ul[data-lightbox] li, ol[data-lightbox] li { display: inline; }
