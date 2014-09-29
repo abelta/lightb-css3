@@ -25,12 +25,6 @@
     transition: opacity .5s linear;
 }
 
-/*
-.lightb-content {
-    border: red solid 2px;
-}
-*/
-
 .lightb-image {
     margin: auto;
     position: absolute;
@@ -49,9 +43,15 @@
     transition: .5s ease-in-out;
 }
 
-/* Styles the close link, adds the slide down transition */
+.lightb-nav {
+    position: absolute;
+    clear: both;
+    max-height: 80%;
+    max-width: 80%;
+}
 
-a.lightb-close {
+
+.lightb-button {
     display: block;
     width:50px;
     height:50px;
@@ -60,12 +60,23 @@ a.lightb-close {
     color: black;
     text-decoration: none;
     position: absolute;
-    top: 0;
-    right: 0;
     -webkit-transition: .5s ease-in-out;
     -moz-transition: .5s ease-in-out;
     -o-transition: .5s ease-in-out;
     transition: .5s ease-in-out;
+}
+
+.lightb-prev {
+
+}
+
+.lightb-next {
+
+}
+
+a.lightb-close {
+    width:50px;
+    height:50px;
 }
 
 /* Provides part of the "X" to eliminate an image from the close link */

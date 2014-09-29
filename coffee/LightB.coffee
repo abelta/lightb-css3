@@ -1,4 +1,4 @@
-class LightB
+class window.LightB
 
     constructor: ->
         console.log 'LightB#constructor'
@@ -25,4 +25,4 @@ class LightB
         @box.display image
 
 
-window.LightB = new LightB
+#window.LightB = new LightB
