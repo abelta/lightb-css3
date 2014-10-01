@@ -13,15 +13,10 @@
       this.list = list;
       console.log('Image#constructor');
       self = this;
+      console.log('SELF', self);
       clickHandler = function() {
-        var ex;
         console.log('Image#constructor#clickHandler');
-        try {
-          window.LightB.display(this);
-        } catch (_error) {
-          ex = _error;
-          console.log(ex);
-        }
+        window.LightB.display(self);
         return false;
       };
       console.log('DOM', this.dom);
@@ -45,6 +40,7 @@
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       console.log('ImageList#constructor');
       self = this;
+      console.log('SELF', self);
       args = (function() {
         var _i, _len, _results;
         _results = [];
@@ -63,19 +59,41 @@
 
   Navigation = (function() {
     function Navigation() {
-      this.reset = __bind(this.reset, this);
       console.log('Navigation#constructor');
-      this.dom = jQuery("<nav class='lightb-nav'></nav>");
-      this.prevButton = jQuery("<a class='lightb-prev'></a>");
-      this.nextButton = jQuery("<a class='lightb-next'></a>");
+      this.dom = jQuery("<nav class='lightb-nav' style='display:none'></nav>");
+      this.prevButton = jQuery("<a class='lightb-prev lightb-button'></a>");
+      this.nextButton = jQuery("<a class='lightb-next lightb-button'></a>");
       jQuery(this.dom).append(this.prevButton).append(this.nextButton);
     }
 
-    Navigation.prototype.reset = function() {
-      return console.log('Navigation#reset');
+    Navigation.prototype.dom = Navigation.dom;
+
+    Navigation.prototype.show = function(image, imageDom) {
+      console.log('Navigation#show');
+      jQuery(this.dom).show();
+      if (image && imageDom) {
+        return this.reset(image, imageDom);
+      }
     };
 
-    Navigation.prototype.dom = Navigation.dom;
+    Navigation.prototype.hide = function() {
+      console.log('Navigation#hide');
+      return jQuery(this.dom).hide();
+    };
+
+    Navigation.prototype.reset = function(image, imageDom) {
+      var list;
+      console.log('Navigation#reset');
+      list = image.list;
+      console.log('list', list.length - 1);
+      jQuery(this.dom).width(jQuery(imageDom).width()).find('.off').removeClass('off');
+      if (list.indexOf(image) === 0) {
+        jQuery(this.prevButton).addClass('off');
+      }
+      if (list.indexOf(image) === list.length - 1) {
+        return jQuery(this.nextButton).addClass('off');
+      }
+    };
 
     return Navigation;
 
@@ -87,7 +105,7 @@
       this.hide = __bind(this.hide, this);
       this.show = __bind(this.show, this);
       console.log('Box#constructor');
-      this.dom = jQuery('<div class="lightb-target off"><a class="lightb-close" href="#"></a></div>');
+      this.dom = jQuery('<div class="lightb-target off"><a class="lightb-close lightb-button" href="#"></a></div>');
       this.nav = new Navigation;
       jQuery('body').append(this.dom);
       jQuery(this.dom).append(this.nav.dom);
@@ -110,28 +128,32 @@
         return function() {
           console.log('Box#hide#handleHide');
           jQuery(_this.dom).hide();
-          return jQuery(_this.dom).find('.lightb-image').remove();
+          jQuery(_this.dom).find('.lightb-image').remove();
+          return _this.nav.hide();
         };
       })(this);
+      this.nav.hide();
       jQuery(this.dom).removeClass('on').addClass('off');
       return setTimeout(handleHide, 500);
     };
 
     Box.prototype.display = function(image) {
-      var displayNavigation, imageDom;
+      var imageDom;
       console.log('Box#display');
-      displayNavigation = function(image, imageDom) {
-        console.log('Box#display#displayNavigation');
-        return console.log('image', image);
-      };
+      console.log('image', image);
       imageDom = jQuery("<img class='lightb-image' src='" + image.href + "' />");
       jQuery(this.dom).append(imageDom);
-      if (image.list) {
-        console.log('It is part of a list.');
-      } else {
-        console.log('It is NOT part of a list.');
-      }
-      return this.show();
+      this.show();
+      return imageDom.one('load', (function(_this) {
+        return function() {
+          if (image.list) {
+            console.log('It is part of a list.');
+            return _this.nav.show(image, imageDom);
+          } else {
+            return console.log('It is NOT part of a list.');
+          }
+        };
+      })(this));
     };
 
     Box.prototype.next = function() {

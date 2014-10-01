@@ -3,12 +3,10 @@ class Image
     constructor: (@dom, @list) ->
         console.log 'Image#constructor'
         self = this
+        console.log 'SELF', self
         clickHandler = ->
             console.log 'Image#constructor#clickHandler'
-            try
-                window.LightB.display this
-            catch ex
-                console.log ex
+            window.LightB.display self
             return false
         console.log 'DOM', @dom
         @href = jQuery(@dom).attr('href')
@@ -16,6 +14,7 @@ class Image
         jQuery(@dom).click clickHandler
 
     href: @href
+
     list: @list
 
 
@@ -26,7 +25,8 @@ class ImageList extends Array
     
     constructor: (args...) ->
         console.log 'ImageList#constructor'
-        self = this
+        self = this    
+        console.log 'SELF', self
         args = (new Image(arg, self) for arg in args)
         @push.apply this, args
 
@@ -36,29 +36,44 @@ class ImageList extends Array
 
 class Navigation
 
-    constructor:  ->
+    constructor: ->
         console.log 'Navigation#constructor'
-        @dom = jQuery("<nav class='lightb-nav'></nav>")
-        @prevButton = jQuery("<a class='lightb-prev'></a>")
-        @nextButton = jQuery("<a class='lightb-next'></a>")
+        @dom = jQuery("<nav class='lightb-nav' style='display:none'></nav>")
+        @prevButton = jQuery("<a class='lightb-prev lightb-button'></a>")
+        @nextButton = jQuery("<a class='lightb-next lightb-button'></a>")
         jQuery(@dom)
             .append(@prevButton)
             .append(@nextButton)
 
-    reset: () =>
-        console.log 'Navigation#reset'
-
     dom: @dom
 
+    show: (image, imageDom) ->
+        console.log 'Navigation#show'
+        do jQuery(@dom).show
+        @reset(image, imageDom) if image and imageDom
 
+    hide: ->
+        console.log 'Navigation#hide'
+        do jQuery(@dom).hide
 
+    reset: (image, imageDom) ->
+        console.log 'Navigation#reset'
+        list = image.list
+        console.log 'list', list.length-1
+        jQuery(@dom)
+            .width( jQuery(imageDom).width() )
+            .find('.off').removeClass('off')
+        jQuery(@prevButton).addClass('off') if list.indexOf(image) == 0
+        jQuery(@nextButton).addClass('off') if list.indexOf(image) == list.length-1
+        
+    
 
 
 class Box
 
     constructor: ->
         console.log 'Box#constructor'
-        @dom = jQuery('<div class="lightb-target off"><a class="lightb-close" href="#"></a></div>')
+        @dom = jQuery('<div class="lightb-target off"><a class="lightb-close lightb-button" href="#"></a></div>')
         @nav = new Navigation
         jQuery('body').append @dom
         jQuery(@dom).append @nav.dom
@@ -74,27 +89,23 @@ class Box
             console.log 'Box#hide#handleHide'
             do jQuery(@dom).hide
             do jQuery(@dom).find('.lightb-image').remove
+            do @nav.hide
+        @nav.hide()
         jQuery(@dom).removeClass('on').addClass('off')
         setTimeout(handleHide, 500)
 
     display: (image) =>
         console.log 'Box#display'
-        
-        displayNavigation = (image, imageDom) ->
-            console.log 'Box#display#displayNavigation'
-            console.log 'image', image            
-
+        console.log 'image', image
         imageDom = jQuery("<img class='lightb-image' src='#{image.href}' />")
         jQuery(@dom).append imageDom
-        
-        
-        if image.list
-            console.log 'It is part of a list.'
-            #displayNavigation(imageDom)
-        else
-            console.log 'It is NOT part of a list.'
-        
         do @show
+        imageDom.one 'load', =>
+            if image.list
+                console.log 'It is part of a list.'
+                @nav.show(image, imageDom)
+            else
+                console.log 'It is NOT part of a list.'
 
     next: ->
         console.log 'Box#next'
