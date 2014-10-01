@@ -86,12 +86,24 @@
       console.log('Navigation#reset');
       list = image.list;
       console.log('list', list.length - 1);
-      jQuery(this.dom).width(jQuery(imageDom).width()).find('.off').removeClass('off');
+      jQuery(this.dom).width(jQuery(imageDom).width()).find('.off').removeClass('off').find('a').off('click');
       if (list.indexOf(image) === 0) {
         jQuery(this.prevButton).addClass('off');
+      } else {
+        jQuery(this.prevButton).on('click', (function(_this) {
+          return function() {
+            return window.LightB.display(list[list.indexOf(image) - 1]);
+          };
+        })(this));
       }
       if (list.indexOf(image) === list.length - 1) {
         return jQuery(this.nextButton).addClass('off');
+      } else {
+        return jQuery(this.prevButton).on('click', (function(_this) {
+          return function() {
+            return window.LightB.display(list[list.indexOf(image) + 1]);
+          };
+        })(this));
       }
     };
 

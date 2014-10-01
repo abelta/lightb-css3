@@ -63,8 +63,15 @@ class Navigation
         jQuery(@dom)
             .width( jQuery(imageDom).width() )
             .find('.off').removeClass('off')
-        jQuery(@prevButton).addClass('off') if list.indexOf(image) == 0
-        jQuery(@nextButton).addClass('off') if list.indexOf(image) == list.length-1
+            .find('a').off('click')
+        if list.indexOf(image) == 0
+            jQuery(@prevButton).addClass('off')
+        else
+            jQuery(@prevButton).on 'click', => window.LightB.display(list[list.indexOf(image)-1])
+        if list.indexOf(image) == list.length-1
+            jQuery(@nextButton).addClass('off')
+        else
+            jQuery(@prevButton).on 'click', => window.LightB.display(list[list.indexOf(image)+1])
         
     
 
