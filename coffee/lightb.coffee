@@ -39,8 +39,8 @@ class Navigation
     constructor: ->
         console.log 'Navigation#constructor'
         @dom = jQuery("<nav class='lightb-nav' style='display:none'></nav>")
-        @prevButton = jQuery("<a class='lightb-prev lightb-button'></a>")
-        @nextButton = jQuery("<a class='lightb-next lightb-button'></a>")
+        @prevButton = jQuery("<a class='lightb-prev-extend' href='#'><div class='lightb-prev lightb-button'></div></a>")
+        @nextButton = jQuery("<a class='lightb-next-extend' href='#'><div class='lightb-next lightb-button'></div></a>")
         jQuery(@dom)
             .append(@prevButton)
             .append(@nextButton)
@@ -64,14 +64,15 @@ class Navigation
             .width( jQuery(imageDom).width() )
             .find('.off').removeClass('off')
             .find('a').off('click')
+        
         if list.indexOf(image) == 0
-            jQuery(@prevButton).addClass('off')
+            jQuery('.lightb-button', @prevButton).addClass('off')
         else
             jQuery(@prevButton).on 'click', => window.LightB.display(list[list.indexOf(image)-1])
         if list.indexOf(image) == list.length-1
-            jQuery(@nextButton).addClass('off')
+            jQuery('.lightb-button', @nextButton).addClass('off')
         else
-            jQuery(@prevButton).on 'click', => window.LightB.display(list[list.indexOf(image)+1])
+            jQuery(@nextButton).on 'click', => window.LightB.display(list[list.indexOf(image)+1])
         
     
 
@@ -105,7 +106,9 @@ class Box
         console.log 'Box#display'
         console.log 'image', image
         imageDom = jQuery("<img class='lightb-image' src='#{image.href}' />")
-        jQuery(@dom).append imageDom
+        jQuery(@dom).find('.lightb-image').remove()
+        jQuery(@dom).append(imageDom)
+
         do @show
         imageDom.one 'load', =>
             if image.list

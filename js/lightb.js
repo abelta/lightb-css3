@@ -61,8 +61,8 @@
     function Navigation() {
       console.log('Navigation#constructor');
       this.dom = jQuery("<nav class='lightb-nav' style='display:none'></nav>");
-      this.prevButton = jQuery("<a class='lightb-prev lightb-button'></a>");
-      this.nextButton = jQuery("<a class='lightb-next lightb-button'></a>");
+      this.prevButton = jQuery("<a class='lightb-prev-extend' href='#'><div class='lightb-prev lightb-button'></div></a>");
+      this.nextButton = jQuery("<a class='lightb-next-extend' href='#'><div class='lightb-next lightb-button'></div></a>");
       jQuery(this.dom).append(this.prevButton).append(this.nextButton);
     }
 
@@ -88,7 +88,7 @@
       console.log('list', list.length - 1);
       jQuery(this.dom).width(jQuery(imageDom).width()).find('.off').removeClass('off').find('a').off('click');
       if (list.indexOf(image) === 0) {
-        jQuery(this.prevButton).addClass('off');
+        jQuery('.lightb-button', this.prevButton).addClass('off');
       } else {
         jQuery(this.prevButton).on('click', (function(_this) {
           return function() {
@@ -97,9 +97,9 @@
         })(this));
       }
       if (list.indexOf(image) === list.length - 1) {
-        return jQuery(this.nextButton).addClass('off');
+        return jQuery('.lightb-button', this.nextButton).addClass('off');
       } else {
-        return jQuery(this.prevButton).on('click', (function(_this) {
+        return jQuery(this.nextButton).on('click', (function(_this) {
           return function() {
             return window.LightB.display(list[list.indexOf(image) + 1]);
           };
@@ -154,6 +154,7 @@
       console.log('Box#display');
       console.log('image', image);
       imageDom = jQuery("<img class='lightb-image' src='" + image.href + "' />");
+      jQuery(this.dom).find('.lightb-image').remove();
       jQuery(this.dom).append(imageDom);
       this.show();
       return imageDom.one('load', (function(_this) {

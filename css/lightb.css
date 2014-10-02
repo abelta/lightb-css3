@@ -91,6 +91,19 @@
     cursor: inherit;
 }
 
+.lightb-prev-extend {
+    float: left;
+    width: 50%;
+    text-decoration: none;
+}
+
+.lightb-next-extend {
+    float: right;
+    width: 50%;
+    text-decoration: none;
+}
+
+
 .lightb-prev {
     position: relative;
     float: left;
@@ -168,6 +181,11 @@
     height:50px;
     top: 0px;
     right: 0px;
+    opacity: .1;
+}
+
+.lightb-close:hover {
+    opacity: .5;
 }
 
 .lightb-close:before {
@@ -211,6 +229,6 @@
     max-width: 100%;
 }
 
-.lightb-target:target a.lightbox-close {
+.lightb-target:target .lightbox-close {
     top: 0px;
 }
