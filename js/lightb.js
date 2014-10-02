@@ -11,15 +11,11 @@
       var clickHandler, self;
       this.dom = dom;
       this.list = list;
-      console.log('Image#constructor');
       self = this;
-      console.log('SELF', self);
       clickHandler = function() {
-        console.log('Image#constructor#clickHandler');
         window.LightB.display(self);
         return false;
       };
-      console.log('DOM', this.dom);
       this.href = jQuery(this.dom).attr('href');
       jQuery(this.dom).click(clickHandler);
     }
@@ -38,9 +34,7 @@
     function ImageList() {
       var arg, args, self;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      console.log('ImageList#constructor');
       self = this;
-      console.log('SELF', self);
       args = (function() {
         var _i, _len, _results;
         _results = [];
@@ -59,7 +53,6 @@
 
   Navigation = (function() {
     function Navigation() {
-      console.log('Navigation#constructor');
       this.dom = jQuery("<nav class='lightb-nav' style='display:none'></nav>");
       this.prevButton = jQuery("<a class='lightb-prev-extend' href='#'><div class='lightb-prev lightb-button'></div></a>");
       this.nextButton = jQuery("<a class='lightb-next-extend' href='#'><div class='lightb-next lightb-button'></div></a>");
@@ -69,7 +62,6 @@
     Navigation.prototype.dom = Navigation.dom;
 
     Navigation.prototype.show = function(image, imageDom) {
-      console.log('Navigation#show');
       jQuery(this.dom).show();
       if (image && imageDom) {
         return this.reset(image, imageDom);
@@ -77,15 +69,12 @@
     };
 
     Navigation.prototype.hide = function() {
-      console.log('Navigation#hide');
       return jQuery(this.dom).hide();
     };
 
     Navigation.prototype.reset = function(image, imageDom) {
       var list;
-      console.log('Navigation#reset');
       list = image.list;
-      console.log('list', list.length - 1);
       jQuery(this.dom).width(jQuery(imageDom).width()).find('.off').removeClass('off').find('a').off('click');
       if (list.indexOf(image) === 0) {
         jQuery('.lightb-button', this.prevButton).addClass('off');
@@ -116,7 +105,6 @@
       this.display = __bind(this.display, this);
       this.hide = __bind(this.hide, this);
       this.show = __bind(this.show, this);
-      console.log('Box#constructor');
       this.dom = jQuery('<div class="lightb-target off"><a class="lightb-close lightb-button" href="#"></a></div>');
       this.nav = new Navigation;
       jQuery('body').append(this.dom);
@@ -125,7 +113,6 @@
     }
 
     Box.prototype.show = function() {
-      console.log('Box#show');
       return jQuery(this.dom).show(0, (function(_this) {
         return function() {
           return jQuery(_this.dom).removeClass('off').addClass('on');
@@ -135,10 +122,8 @@
 
     Box.prototype.hide = function() {
       var handleHide;
-      console.log('Box#hide');
       handleHide = (function(_this) {
         return function() {
-          console.log('Box#hide#handleHide');
           jQuery(_this.dom).hide();
           jQuery(_this.dom).find('.lightb-image').remove();
           return _this.nav.hide();
@@ -151,8 +136,6 @@
 
     Box.prototype.display = function(image) {
       var imageDom;
-      console.log('Box#display');
-      console.log('image', image);
       imageDom = jQuery("<img class='lightb-image' src='" + image.href + "' />");
       jQuery(this.dom).find('.lightb-image').remove();
       jQuery(this.dom).append(imageDom);
@@ -160,21 +143,10 @@
       return imageDom.one('load', (function(_this) {
         return function() {
           if (image.list) {
-            console.log('It is part of a list.');
             return _this.nav.show(image, imageDom);
-          } else {
-            return console.log('It is NOT part of a list.');
           }
         };
       })(this));
-    };
-
-    Box.prototype.next = function() {
-      return console.log('Box#next');
-    };
-
-    Box.prototype.prev = function() {
-      return console.log('Box#prev');
     };
 
     return Box;
@@ -185,17 +157,14 @@
     var LightBKeyHandler;
 
     function LightB() {
-      console.log('LightB#constructor');
       this.box = new Box;
       this.initialize();
     }
 
     LightB.prototype.initialize = function() {
-      console.log('LightB#initialize');
       jQuery(document).on('keyup', LightBKeyHandler);
       return jQuery('[data-lightbox]').each(function(i, elem) {
         var images;
-        console.log('elem', elem);
         if (jQuery(elem).is('a')) {
           return new Image(elem);
         } else {
@@ -210,14 +179,12 @@
     };
 
     LightBKeyHandler = function(e) {
-      console.log('LightBKeyHandler');
       if (e.which === 27) {
         return window.LightB.box.hide();
       }
     };
 
     LightB.prototype.display = function(image) {
-      console.log('LightB#display');
       return this.box.display(image);
     };
 

@@ -46,7 +46,7 @@
 .lightb-nav {
     position: absolute;
     opacity: .1;
-    height: 50px;
+    height: 100%;
     clear: both;
     margin: auto;
     top: 0;
@@ -94,20 +94,26 @@
 .lightb-prev-extend {
     float: left;
     width: 50%;
+    height: 100%;
     text-decoration: none;
 }
 
 .lightb-next-extend {
     float: right;
     width: 50%;
+    height: 100%;
     text-decoration: none;
 }
 
 
 .lightb-prev {
-    position: relative;
+    position: absolute;
     float: left;
     width: 25px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
 }
 
 .lightb-prev:before {
@@ -141,9 +147,13 @@
 }
 
 .lightb-next {
-    position: relative;
+    position: absolute;
     float: right;
     width: 25px;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
 }
 
 .lightb-next:before {
