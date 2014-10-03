@@ -45,7 +45,7 @@ or put a set of images in a container like a list or layer and mark only the con
 See it in action
 ===========
 
-[Here](https://cdn.rawgit.com/abelta/lightb-css3/master/index.html)
+[Here](https://rawgit.com/abelta/lightb-css3/master/index.html)
 
 
 
